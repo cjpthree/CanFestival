@@ -220,7 +220,7 @@ proceedPDO (CO_Data * d, Message * m)
                 offsetObjdict = d->firstIndex->PDO_RCV_MAP;
                 lastIndex = d->lastIndex->PDO_RCV_MAP;
                 numMap = 0;
-                while (numMap < READ_UNS8(d->objdict, offsetObjdict, 0))
+                while (numMap < READ_UNS8(d->objdict, offsetObjdict + numPdo, 0))
                   {
                     UNS8 tmp[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
                     UNS32 ByteSize;
@@ -610,6 +610,7 @@ _sendPDOevent (CO_Data * d, UNS8 isSyncEvent)
   UNS16 offsetObjdict = d->firstIndex->PDO_TRS;
   UNS16 offsetObjdictMap = d->firstIndex->PDO_TRS_MAP;
   UNS16 lastIndex = d->lastIndex->PDO_TRS;
+  UNS8 transmissionType;
 
   if (!d->CurrentCommunicationState.csPDO)
     {
@@ -638,7 +639,7 @@ _sendPDOevent (CO_Data * d, UNS8 isSyncEvent)
                   break;
                 }
               /* get the PDO transmission type */
-              UNS8 transmissionType =
+              transmissionType =
                 READ_UNS8(d->objdict, offsetObjdict, 2);
               MSG_WAR (0x3962, "Reading PDO at index : ", 0x1800 + pdoNum);
 
